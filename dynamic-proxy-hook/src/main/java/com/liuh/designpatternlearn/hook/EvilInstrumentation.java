@@ -8,45 +8,62 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by huan on 2018/4/15.
+ * Created by huan on 2018/5/5.
+ * 因为Instrumentation是一个类，不是接口，而jdk动态代理只支持接口，所以这里使用静态代理，覆盖掉原始的方法
  */
 
 public class EvilInstrumentation extends Instrumentation {
 
     private static final String TAG = "EvilInstrumentation";
 
-    //Activity中的原始的对象，保存起来
+    //ActivityThread中原始的对象，保存起来
     Instrumentation mBase;
 
     public EvilInstrumentation(Instrumentation mBase) {
         this.mBase = mBase;
     }
 
-    public ActivityResult execStartActivity(Context who, IBinder contextThread, IBinder token,
-                                            Activity target, Intent intent, int requestCode,
-                                            Bundle options) {
-        //Hook之前，xxx到此一游
-        Log.e(TAG, "\n执行了startActivity，参数如下：\n" + "who=" + who + ",contextThread=" + contextThread
-                + ",token=" + token + ",target=" + target + ",intent=" + intent + ",requestCode=" + requestCode
-                + ",options=" + options);
-        //开始调用原始的方法，调不调随你，但是如果不调用的话，所有的startActivity就会都失效。
-        //由于这个方法是隐藏的，因此需要使用反射调用；首先找到这个方法
-        try {
-            Method execStartActivity = Instrumentation.class.getDeclaredMethod(
-                    "execStartActivity",
-                    Context.class, IBinder.class, IBinder.class, Activity.class,
-                    Intent.class, int.class, Bundle.class);
-            return (ActivityResult) execStartActivity.invoke(mBase, who, contextThread, token, target,
-                    intent, requestCode, options);
+    public ActivityResult execStartActivity(Context who, IBinder contextThread, IBinder token, Activity target,
+                                            Intent intent, int requestCode, Bundle options) {
 
-        } catch (Exception e) {
-            //被某个rom修改了，需要手动适配
+        // Hook之前, XXX到此一游!
+        Log.e(TAG, "\n执行了startActivity, 参数如下: \n" + "who = [" + who + "], " +
+                "\ncontextThread = [" + contextThread + "], \ntoken = [" + token + "], " +
+                "\ntarget = [" + target + "], \nintent = [" + intent +
+                "], \nrequestCode = [" + requestCode + "], \noptions = [" + options + "]");
+
+        //开始调用原始的方法，调不调用随你，但是不调用的话，所有的startActivity都会失效，
+        //由于这个方法是隐藏的，因此需要使用反射调用；首先找到这个方法
+
+        try {
+            Method execStartActivity = Instrumentation.class.getDeclaredMethod("execStartActivity",
+                    Context.class,
+                    IBinder.class,
+                    IBinder.class,
+                    Activity.class,
+                    Intent.class,
+                    int.class,
+                    Bundle.class);
+
+            execStartActivity.setAccessible(true);
+
+            return (ActivityResult) execStartActivity.invoke(mBase, who, contextThread, token, target, intent, requestCode, options);
+
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            // 某该死的rom修改了  需要手动适配
             throw new RuntimeException("do not support!!! pls adapt it");
         }
+        return null;
     }
 
 }

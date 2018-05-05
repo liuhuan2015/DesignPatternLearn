@@ -10,8 +10,6 @@ import android.widget.Button;
 
 import com.liuh.designpatternlearn.hook.HookHelper;
 
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -35,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
                 //因为Activity对象的startActivity使用的并不是ContextImpl的mInstrumentation
                 //而是自己的mInstrumentation,如果你需要这样，可以自己Hook
                 //比较简单，直接替换这个Activity的此字段即可
-//                getApplicationContext().startActivity(intent);
-                startActivity(intent);
+                getApplicationContext().startActivity(intent);
+//                startActivity(intent);
             }
         });
     }
 
+    //这个方法在onCreate(...)方法执行前执行
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
