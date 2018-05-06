@@ -10,6 +10,13 @@ import android.widget.Button;
 
 import com.liuh.designpatternlearn.hook_activity_startActivity.HookActivityHelper;
 
+/**
+ * 我们知道，代理有比原始对象更强大的能力，比如飞到国外去买东西，坑钱坑货等。那么很自然，如果我们自己创建代理对象，
+ * 然后把原始对象替换成我们的代理对象，那么就可以在这个代理对象中为所欲为了：修改参数，替换返回值等。
+ * 这种使用代理对象替换原始对象，然后做一些额外操作的行为，我们称之为Hook。
+ * <p>
+ * 这个module展示了静态代理，动态代理。以及使用代理模式分别Hook Context.startActivity(...)和Hook Activity.startActivity(...)
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
