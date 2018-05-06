@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.liuh.designpatternlearn.hook.HookHelper;
+import com.liuh.designpatternlearn.hook_activity_startActivity.HookActivityHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +17,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 //        ButterKnife.bind(this);
+
+        try {
+            HookActivityHelper.attachContext(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Button tv = new Button(this);
         tv.setText("测试界面");
 
@@ -33,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 //因为Activity对象的startActivity使用的并不是ContextImpl的mInstrumentation
                 //而是自己的mInstrumentation,如果你需要这样，可以自己Hook
                 //比较简单，直接替换这个Activity的此字段即可
-                getApplicationContext().startActivity(intent);
-//                startActivity(intent);
+//                getApplicationContext().startActivity(intent);
+
+                startActivity(intent);
             }
         });
     }
@@ -46,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             //在这里进行Hook
-            HookHelper.attachContext();
+            //HookHelper.attachContext();
         } catch (Exception e) {
             e.printStackTrace();
         }

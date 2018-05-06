@@ -15,6 +15,10 @@ import java.lang.reflect.Method;
  * (Activity) null, intent, -1, options);
  * 因为mMainThread是主线程，而主线程一个进程只有一个，因此这是一个良好的hook点
  * 我们写一个Instrumentation的代理类，在其中执行execStartActivity之前打印一个我们的Log
+ * <p>
+ * 1.寻找Hook点，原则是静态变量或者单例对象，尽量Hook public的对象和方法，非public的不保证每个版本都一样，需要适配
+ * 2.选择合适的代理方式，如果是接口可以使用动态代理；如果是类，可以手动写代理或者使用cglib
+ * 3.偷梁换柱：用代理对象替换原始对象。
  */
 
 public class HookHelper {
