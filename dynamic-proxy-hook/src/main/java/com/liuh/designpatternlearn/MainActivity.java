@@ -1,5 +1,6 @@
 package com.liuh.designpatternlearn;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("测试界面");
 
         setContentView(tv);
+
+        ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
 
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
