@@ -1,1 +1,1 @@
-include ':dynamic-proxy-hook', ':singletonpattern', ':factorypattern'
+include ':dynamic-proxy-hook', ':singletonpattern', ':factorypattern', ':decoratorpattern'
