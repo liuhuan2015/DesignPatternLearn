@@ -1,1 +1,1 @@
-include ':dynamic-proxy-hook', ':singletonpattern', ':factorypattern', ':decoratorpattern', ':builderpattern', ':observerpattern'
+include ':dynamic-proxy-hook', ':singletonpattern', ':factorypattern', ':decoratorpattern', ':builderpattern', ':observerpattern', ':ChainOfResponse'
