@@ -80,7 +80,33 @@ module是参照网上的示例代码写的一个简单的demo。
 
 #### 7. 代理模式
 
+代理有比原始对象更为强大的能力。比如module中展示的代理坑钱坑货等。
+
+在android中可以使用自己的代理对象替换原生对象，以实现一些额外操作，这种操作一般称之为hook技术。
+
 代理模式又分为静态代理、动态代理。
+
+静态代理需要我们为每一个被代理的类写一个代理类，当需要被代理的类有很多时，使用静态代理就不合适了，此时可以使用java jdk提供的动态代理技术，它可以在jvm运行的时候帮我们动态的生成一系列的代理类。
+
+动态代理主要涉及到两个类：
+1. Interface InvocationHandler
+ * 该接口中仅定义了一个方法：public Object invoke(Object obj, Method method, Object[] args)，
+ * 在使用时，第一个参数obj一般是指被代理的对象，method是被代理的方法，args为该方法的参数数组。
+ * 这个抽象方法在代理类中动态实现。
+2. Proxy
+ * 该类即为动态代理类，
+ * static Object newProxyInstance(ClassLoader loader, Class[] interfaces, InvocationHandler h)，
+ * 返回代理类的一个实例，返回后的代理类可以当作被代理类使用
+ * loader 类加载器
+ * interfaces 实现接口
+
+android中常用的网络请求库 retrofit 中就使用了动态代理技术。
+
+
+
+
+
+
 
 
 
